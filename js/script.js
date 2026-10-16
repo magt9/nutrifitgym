@@ -1,4 +1,4 @@
-// js/script.js - POS Gimnasio con Pestaña de Control de Acceso por Clave
+// js/script.js - POS Gimnasio (Aislado - nutri-fit-pro)
 
 function initGymApp() {
   return {
@@ -8,7 +8,7 @@ function initGymApp() {
     emailAuth: '',
     passAuth: '',
 
-    pestanaActiva: 'pos', // 'pos' o 'acceso'
+    pestanaActiva: 'pos',
     claveAccesoInput: '',
     resultadoAcceso: null,
 
@@ -48,14 +48,15 @@ function initGymApp() {
       setTimeout(() => { this.cargandoAuth = false; }, 1000);
 
       try {
+        // Inicialización con las credenciales aisladas de nutri-fit-pro
         if (typeof firebase !== 'undefined' && !firebase.apps.length) {
           firebase.initializeApp({
-            apiKey: "AIzaSyCmT6nhn604z13KYwBtgORwKbil_aUx20s",
-            authDomain: "mi-pos-restaurant-appsweb.firebaseapp.com",
-            projectId: "mi-pos-restaurant-appsweb",
-            storageBucket: "mi-pos-restaurant-appsweb.firebasestorage.app",
-            messagingSenderId: "329389609164",
-            appId: "1:329389609164:web:24839bef9222d58c79b269"
+            apiKey: "TU_API_KEY_DE_FIREBASE",
+            authDomain: "nutri-fit-pro.firebaseapp.com",
+            projectId: "nutri-fit-pro",
+            storageBucket: "nutri-fit-pro.appspot.com",
+            messagingSenderId: "TUS_DATOS",
+            appId: "TUS_DATOS"
           });
         }
 
@@ -153,7 +154,6 @@ function initGymApp() {
         });
     },
 
-    // --- LÓGICA DEL CONTROL DE ACCESO DE MIEMBROS ---
     verificarAccesoSocio(claveBuscada) {
       if (!claveBuscada) return;
 
