@@ -21,7 +21,7 @@
     }
   </style>
 
-  <!-- SDKs de Firebase -->
+  <!-- SDKs de Firebase Oficiales (Compatibles con Versión 8/9) -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -42,7 +42,7 @@
     <div class="bg-white text-gray-800 p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-md">
       <div class="text-center mb-6">
         <span class="text-5xl">🏋️‍♂️</span>
-        <h1 class="text-2xl font-black mt-2">Gym Manager POS</h1>
+        <h1 class="text-2xl font-black mt-2">Gym Manager POS Pro</h1>
         <p class="text-xs text-gray-500" x-text="modoRegistro ? 'Crea la cuenta de tu Gimnasio' : 'Ingresa al portal de recepción'"></p>
       </div>
 
@@ -227,7 +227,7 @@
 
     </div>
 
-    <!-- PESTAÑA 2: CONTROL DE ACCESO DE MIEMBROS (VALIDADOR RECEPCIÓN) -->
+    <!-- PESTAÑA 2: CONTROL DE ACCESO DE MIEMBROS -->
     <div x-show="pestanaActiva === 'acceso'" class="flex-grow p-4 md:p-8 flex flex-col items-center justify-center w-full max-w-4xl mx-auto">
       <div :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'" class="w-full rounded-3xl p-6 md:p-10 border shadow-2xl text-center space-y-6">
         
@@ -267,7 +267,6 @@
               <p class="text-base font-bold mt-2" x-text="resultadoAcceso.vencido ? 'Membresía Vencida el: ' + (resultadoAcceso.fechaVencimiento || 'Sin registro') : 'Vigente hasta el: ' + resultadoAcceso.fechaVencimiento"></p>
             </div>
 
-            <!-- Botón para cobrar si está vencido -->
             <div x-show="resultadoAcceso.vencido" class="mt-6">
               <button 
                 @click="cargarSocioACaja(resultadoAcceso)" 
@@ -351,9 +350,9 @@
 
         <h4 class="text-xs font-bold text-indigo-400 uppercase mb-1">Añadir Producto o Membresía:</h4>
         <div class="space-y-2 text-xs md:text-sm">
-          <input type="text" x-model="nuevoNombre" placeholder="Nombre (ej. Visita / Semanal / Mensual / Agua)" class="w-full p-2 bg-gray-900 border border-gray-600 rounded-lg text-white">
+          <input type="text" x-model="nuevoNombre" placeholder="Nombre (ej. Visita / Semanal / Mensual)" class="w-full p-2 bg-gray-900 border border-gray-600 rounded-lg text-white">
           <input type="number" x-model="nuevoPrecio" placeholder="Precio ($)" class="w-full p-2 bg-gray-900 border border-gray-600 rounded-lg text-white">
-          <input type="text" x-model="nuevoEmoji" placeholder="Emoji (ej. 🏋️‍♂️ / 💧 / 🎟️)" class="w-full p-2 bg-gray-900 border border-gray-600 rounded-lg text-white">
+          <input type="text" x-model="nuevoEmoji" placeholder="Emoji (ej. 🏋️‍♂️ / 💧)" class="w-full p-2 bg-gray-900 border border-gray-600 rounded-lg text-white">
           
           <div class="p-2 bg-gray-900 rounded-lg border border-gray-600 space-y-2">
             <div class="flex items-center gap-2">
@@ -364,7 +363,7 @@
             <div x-show="nuevoEsServicio" class="pt-2 border-t border-gray-700 space-y-1">
               <label class="block text-[11px] font-bold text-indigo-400">Duración de la Membresía:</label>
               <select x-model="nuevaDuracionDias" class="w-full p-2 bg-gray-800 border border-gray-600 rounded-lg text-xs text-white font-bold">
-                <option value="1">🎟️ 1 Día (Pase por Día / Visita)</option>
+                <option value="1">🎟️ 1 Día (Pase por Día)</option>
                 <option value="7">📅 7 Días (Pase Semanal)</option>
                 <option value="15">📆 15 Días (Pase Quincenal)</option>
                 <option value="30">🗓️ 30 Días (Membresía Mensual)</option>
@@ -381,7 +380,6 @@
               <div>
                 <span class="font-bold text-gray-200" x-text="(item.imagen || '🏷️') + ' ' + item.nombre"></span>
                 <span class="text-indigo-400" x-text="' ($' + item.precio + ')'"></span>
-                <span class="text-[10px] text-gray-400 block" x-text="item.esServicio ? ('Vigencia: ' + item.duracionDias + ' día(s)') : 'Producto Físico'"></span>
               </div>
               <button @click="eliminarProductoWeb(item.id)" class="text-red-400 font-bold px-2">🗑️</button>
             </div>
@@ -392,11 +390,10 @@
       </div>
     </div>
 
-    <!-- MODAL INVENTARIO DE PRODUCTOS FÍSICOS -->
+    <!-- MODAL INVENTARIO -->
     <div x-show="mostrarInventario" x-cloak class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-2">
       <div class="bg-gray-800 text-gray-100 p-4 md:p-6 rounded-2xl w-full max-w-lg shadow-xl max-h-[85vh] flex flex-col border border-gray-700">
-        <h3 class="text-base md:text-lg font-extrabold mb-2">📦 Control de Stock (Productos)</h3>
-
+        <h3 class="text-base md:text-lg font-extrabold mb-2">📦 Control de Stock</h3>
         <div class="flex-1 overflow-y-auto border-t border-gray-700 pt-2 space-y-2">
           <template x-for="prod in menu.filter(p => !p.esServicio)" :key="prod.id">
             <div class="p-2 border border-gray-700 rounded-xl bg-gray-900 flex justify-between items-center text-xs">
@@ -404,7 +401,6 @@
                 <p class="font-bold text-gray-100" x-text="prod.nombre"></p>
                 <p class="text-indigo-400 font-bold" x-text="priceFormat(prod.precio)"></p>
               </div>
-
               <div class="flex items-center gap-1.5">
                 <span class="font-bold bg-gray-800 px-2 py-1 rounded text-white" x-text="'Stock: ' + (prod.stock || 0)"></span>
                 <button @click="actualizarStockProducto(prod)" class="bg-indigo-600 text-white px-2 py-1 rounded font-bold text-xs">Ajustar</button>
@@ -412,23 +408,19 @@
             </div>
           </template>
         </div>
-
         <button @click="mostrarInventario = false" class="w-full mt-3 bg-gray-700 text-gray-200 p-2 rounded-lg text-xs font-bold hover:bg-gray-600 transition">Cerrar</button>
       </div>
     </div>
 
-    <!-- MODAL REPORTE / CORTE DE CAJA -->
+    <!-- MODAL CORTE DE CAJA -->
     <div x-show="mostrarReporte" x-cloak class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-2">
       <div class="bg-gray-800 text-gray-100 p-4 md:p-6 rounded-2xl w-full max-w-md shadow-xl max-h-[85vh] flex flex-col border border-gray-700">
         <h3 class="text-base md:text-lg font-extrabold mb-2">📊 Corte de Caja del Día</h3>
-
         <div class="bg-emerald-900/40 border border-emerald-700 p-3 rounded-xl mb-3 text-center">
           <span class="font-bold text-emerald-300 text-xs block">Ventas e Ingresos Totales:</span>
           <span class="text-2xl font-black text-emerald-400" x-text="priceFormat(getTotalVentas())"></span>
         </div>
-
         <div class="flex-1 overflow-y-auto space-y-1.5 border-t border-gray-700 pt-2">
-          <h4 class="font-bold text-[10px] text-gray-400 uppercase">Cobros Registrados:</h4>
           <template x-for="v in ventasRealizadas" :key="v.id">
             <div class="p-2 border border-gray-700 rounded-xl bg-gray-900 flex justify-between items-center text-xs">
               <div>
@@ -439,7 +431,6 @@
             </div>
           </template>
         </div>
-
         <button @click="mostrarReporte = false" class="w-full mt-3 bg-gray-700 text-gray-200 p-2 rounded-lg text-xs font-bold hover:bg-gray-600 transition">Cerrar</button>
       </div>
     </div>
